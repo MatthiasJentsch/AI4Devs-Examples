@@ -1,9 +1,22 @@
 import { TavilySearch } from "@langchain/tavily";
-import { ChatOpenAI } from "@langchain/openai";
+import { initChatModel } from "langchain/chat_models/universal";
 import type { AIMessage } from "@langchain/core/messages";
 import { ToolNode } from "@langchain/langgraph/prebuilt";
 import { MessagesAnnotation, StateGraph, Annotation } from "@langchain/langgraph";
 import type { RunnableConfig } from "@langchain/core/runnables";
+
+const ConfigurationSchema = Annotation.Root({
+    /**
+     * The name of the language model to be used by the agent (e.g., "gpt-4o-mini", "gpt-4.1-mini").
+     */
+    model_name: Annotation<string>,
+    model_provider: Annotation<string>,
+    temperature: Annotation<number>,
+    /**
+     * The system prompt to be used by the agent.
+     */
+    system_prompt: Annotation<string>,
+});
 
 const tools = [
   new TavilySearch({ maxResults: 3, }),
@@ -24,15 +37,26 @@ function routeModelOutput(state: typeof MessagesAnnotation.State) {
 // Define the function that calls the model
 async function callModel(
   state: typeof MessagesAnnotation.State,
+  config: RunnableConfig<typeof ConfigurationSchema.State>,
 ) {
-  const model = new ChatOpenAI({
-      model: "gpt-4o-mini",
-    }).bindTools(tools);
+  /**
+   * Call the LLM powering our agent.
+   * Feel free to customize the prompt, model, and other logic!
+   */
+  const model = (
+     await initChatModel(
+      config.configurable?.model_name ?? "gpt-4o-mini",
+      {
+        modelProvider: config.configurable?.model_name ?? "openai",
+        temperature: config.configurable?.temperature ?? 0,
+      }
+    )
+  ).bindTools(tools);
 
   const response = await model.invoke([
     {
       role: "system",
-      content: `You are a helpful assistant. The current date is ${new Date().getTime()}.`
+      content: config.configurable?.system_prompt ?? `You are a helpful assistant. The current date is ${new Date().getTime()}.`
     },
     ...state.messages
   ]);
@@ -43,7 +67,7 @@ async function callModel(
 // Define a new graph.
 // See https://langchain-ai.github.io/langgraphjs/how-tos/define-state/#getting-started for
 // more on defining custom graph states.
-const workflow = new StateGraph(MessagesAnnotation)
+const workflow = new StateGraph(MessagesAnnotation, ConfigurationSchema)
   // Define the two nodes we will cycle between
   .addNode("callModel", callModel)
   .addNode("tools", new ToolNode(tools))
