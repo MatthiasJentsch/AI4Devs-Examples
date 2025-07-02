@@ -11,4 +11,8 @@ To run the first example, make sure to fill in the `.env` file with your OpenAI 
 
 ```bash
 npx tsx src/firstExamples/1_agent_simple.mts
+
+# or
+
+npx tsx src/firstExamples/2_agent_workflow.mts
 ```
