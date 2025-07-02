@@ -38,9 +38,34 @@ async function callModel(state: typeof MessagesAnnotation.State) {
 }
 
 // Define a new graph
-
+const workflow = new StateGraph(MessagesAnnotation)
+  .addNode("agent", callModel)
+  .addEdge("__start__", "agent") // __start__ is a special name for the entrypoint
+  .addNode("tools", toolNode)
+  .addEdge("tools", "agent")
+  .addConditionalEdges("agent", shouldContinue);
 
 // Finally, we compile it into a LangChain Runnable.
-
+const app = workflow.compile();
 
 // Use the agent
+const finalState = await app.invoke({
+  messages: [new HumanMessage("Wie ist das Wetter in Regensburg?")],
+});
+console.log(finalState.messages[finalState.messages.length - 1].content);
+
+const nextState = await app.invoke({
+  // Including the messages from the previous run gives the LLM context.
+  // This way it knows we're asking about the weather in NY
+  messages: [...finalState.messages, new HumanMessage("Und in München?")],
+});
+console.log(nextState.messages[nextState.messages.length - 1].content);
+
+import { writeFileSync } from "node:fs";
+
+const graph = await app.getGraphAsync();
+const image = await graph.drawMermaidPng();
+const arrayBuffer = await image.arrayBuffer();
+
+const filePath = "./graphState_workflow.png";
+writeFileSync(filePath, new Uint8Array(arrayBuffer));
