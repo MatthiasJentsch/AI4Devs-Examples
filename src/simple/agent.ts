@@ -30,6 +30,10 @@ async function callModel(state: typeof MessagesAnnotation.State) {
   }).bindTools(tools);
 
   const response = await model.invoke([
+    {
+      role: "system",
+      content: `You are a helpful assistant. The current date is ${new Date().getTime()}.`
+    },
     ...state.messages
   ]);
 
