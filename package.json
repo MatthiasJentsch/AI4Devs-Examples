@@ -1,0 +1,17 @@
+{
+  "name": "langgraphjs-studio-starter",
+  "packageManager": "yarn@1.22.22",
+  "dependencies": {
+    "@langchain/community": "latest",
+    "@langchain/core": "latest",
+    "@langchain/langgraph": "latest",
+    "@langchain/openai": "latest",
+    "@langchain/tavily": "latest",
+    "dotenv": "latest",
+    "langsmith": "latest"
+  },
+  "devDependencies": {
+    "@tsconfig/recommended": "latest",
+    "typescript": "latest"
+  }
+}
