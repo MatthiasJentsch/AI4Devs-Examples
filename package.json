@@ -8,7 +8,11 @@
     "@langchain/openai": "latest",
     "@langchain/tavily": "latest",
     "dotenv": "latest",
-    "langsmith": "latest"
+    "langsmith": "latest",
+    "pdf-parse": "latest",
+    "faiss-node": "latest",
+    "zod": "latest",
+    "zod-to-json-schema": "latest"
   },
   "devDependencies": {
     "@tsconfig/recommended": "latest",

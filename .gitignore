@@ -20,3 +20,6 @@ node_modules/
 
 
 package-lock.json
+
+docstore.json
+faiss_index
