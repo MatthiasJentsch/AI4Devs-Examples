@@ -118,4 +118,16 @@ export function ensureConfiguration(
       configurable.queryProvider || "openai",
     queryModel: configurable.queryModel || "gpt-4o-mini",
   };
+
+  /*return {
+    ...indexConfig,
+    responseSystemPromptTemplate:
+      configurable.responseSystemPromptTemplate || RESPONSE_SYSTEM_PROMPT_TEMPLATE,
+    responseProvider: configurable.responseProvider || "huggingface",
+    responseModel: configurable.responseModel || "meta-llama/Llama-3.1-8B",
+    querySystemPromptTemplate:
+      configurable.querySystemPromptTemplate || QUERY_SYSTEM_PROMPT_TEMPLATE,
+    queryProvider: configurable.queryProvider || "huggingface",
+    queryModel: configurable.queryModel || "meta-llama/Llama-3.1-8B",
+  };*/
 }

@@ -7,7 +7,7 @@ export const IndexInputAnnotation = Annotation.Root({
   /**
    * Pfad zur PDF-Datei, die geladen werden soll.
    */
-  pdfPath: Annotation<string>(),
+  emailMboxPath: Annotation<string>(),
 });
 
 /**
@@ -18,7 +18,7 @@ export const IndexStateAnnotation = Annotation.Root({
   /**
    * Pfad zur PDF-Datei, die geladen werden soll.
    */
-  pdfPath: Annotation<string>(),
+  emailMboxPath: Annotation<string>(),
   /**
    * Stores the documents in the index.
    */

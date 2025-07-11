@@ -3,9 +3,6 @@
   "dockerfile_lines": [],
   "dependencies": ["."],
   "graphs": {
-    "agent_simple": "./src/simple/agent.ts:graph",
-    "agent_configOneFile": "./src/configOneFile/agent.ts:graph",
-    "agent_config": "./src/config/agent.ts:graph",
     "indexer": "./src/rag_basic/index_graph.ts:graph",
     "retrieval": "./src/rag_basic/retrieval_graph.ts:graph"
   },
